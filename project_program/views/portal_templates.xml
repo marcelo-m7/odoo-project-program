@@ -1,0 +1,8 @@
+<odoo>
+    <template id="portal_program_projects" name="My Program Projects">
+        <t t-call="portal.portal_layout"><div class="container my-4"><h1>My Program Projects</h1><div t-if="not items" class="alert alert-info">No authorized program projects.</div><ul class="list-group"><li t-foreach="items" t-as="item" class="list-group-item"><a t-att-href="'/my/program-projects/%s' % item['id']" t-esc="item['name']"/><span class="text-muted ms-2" t-esc="item['program']"/></li></ul></div></t>
+    </template>
+    <template id="portal_program_project_detail" name="Program Project">
+        <t t-call="portal.portal_layout"><div class="container my-4"><h1 t-esc="project_name"/><a href="/my/program-projects">Back to projects</a><div t-if="not reviews" class="alert alert-info mt-3">No published reviews.</div><section t-foreach="reviews" t-as="review" class="card my-3"><div class="card-body"><h2 class="h5"><span t-esc="review['period_start']"/> – <span t-esc="review['period_end']"/></h2><p t-esc="review['summary']"/><table class="table table-sm" t-if="review['values']"><thead><tr><th>Goal</th><th>Baseline</th><th>Target</th><th>Value</th><th>Progress</th></tr></thead><tbody><tr t-foreach="review['values']" t-as="value"><td t-esc="value['name']"/><td><span t-esc="value['baseline']"/> <span t-esc="value['unit']"/></td><td><span t-esc="value['target']"/> <span t-esc="value['unit']"/></td><td><span t-esc="value['value']"/> <span t-esc="value['unit']"/></td><td><span t-if="value['progress'] is not False" t-esc="'%.1f%%%%' % value['progress']"/><span t-else="">Sem dados</span></td></tr></tbody></table></div></section></div></t>
+    </template>
+</odoo>

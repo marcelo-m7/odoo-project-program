@@ -1,0 +1,39 @@
+<odoo>
+    <record id="view_program_list" model="ir.ui.view">
+        <field name="name">project.program.list</field>
+        <field name="model">project.program</field>
+        <field name="arch" type="xml">
+            <list><field name="name"/><field name="code"/><field name="company_id" groups="base.group_multi_company"/><field name="user_id"/><field name="date_start"/><field name="date_end"/><field name="state"/></list>
+        </field>
+    </record>
+    <record id="view_program_form" model="ir.ui.view">
+        <field name="name">project.program.form</field>
+        <field name="model">project.program</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" type="object" string="Activate" invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_close" type="object" string="Close" invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_projects" type="object" class="oe_stat_button" icon="fa-folder"><field name="project_count" widget="statinfo" string="Projects"/></button>
+                        <button name="action_view_goals" type="object" class="oe_stat_button" icon="fa-bullseye"><field name="goal_count" widget="statinfo" string="Goals"/></button>
+                        <button name="action_view_reviews" type="object" class="oe_stat_button" icon="fa-file-text"><field name="pending_review_count" widget="statinfo" string="Pending Reviews"/></button>
+                    </div>
+                    <group><group><field name="name"/><field name="code"/><field name="company_id"/><field name="user_id"/></group><group><field name="date_start"/><field name="date_end"/><field name="active"/></group></group>
+                    <notebook><page string="Projects"><field name="project_ids" context="{'default_program_id': id, 'default_company_id': company_id}" readonly="state == 'closed'"><list><field name="name"/><field name="partner_id"/><field name="user_id"/><field name="company_id"/></list></field></page></notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_program_search" model="ir.ui.view">
+        <field name="name">project.program.search</field><field name="model">project.program</field>
+        <field name="arch" type="xml"><search><field name="name"/><field name="code"/><field name="user_id"/><filter name="active_programs" string="Active" domain="[('state','=','active')]"/><group><filter name="group_company" string="Company" context="{'group_by':'company_id'}"/><filter name="group_state" string="State" context="{'group_by':'state'}"/></group></search></field>
+    </record>
+    <record id="action_program" model="ir.actions.act_window"><field name="name">Programs</field><field name="res_model">project.program</field><field name="view_mode">list,form</field></record>
+    <menuitem id="menu_program_root" name="Programs" parent="project.menu_main_pm" sequence="45" groups="project_program.group_program_user"/>
+    <menuitem id="menu_programs" name="Programs" parent="menu_program_root" action="action_program" sequence="10"/>
+</odoo>

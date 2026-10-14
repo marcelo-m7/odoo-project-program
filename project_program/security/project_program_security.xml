@@ -1,0 +1,50 @@
+<odoo>
+    <record id="group_program_user" model="res.groups">
+        <field name="name">Program User</field>
+        <field name="implied_ids" eval="[(4, ref('project.group_project_user'))]"/>
+    </record>
+    <record id="group_program_manager" model="res.groups">
+        <field name="name">Program Manager</field>
+        <field name="implied_ids" eval="[(4, ref('project_program.group_program_user'))]"/>
+    </record>
+
+    <record id="rule_program_company" model="ir.rule">
+        <field name="name">Program: allowed companies</field>
+        <field name="model_id" ref="model_project_program"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_membership_company" model="ir.rule">
+        <field name="name">Program membership: allowed companies</field>
+        <field name="model_id" ref="model_project_program_membership"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_measurement_company" model="ir.rule">
+        <field name="name">Program measurement: allowed companies</field>
+        <field name="model_id" ref="model_project_program_measurement"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_review_company" model="ir.rule">
+        <field name="name">Program review: allowed companies</field>
+        <field name="model_id" ref="model_project_program_review"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Standard portal pages expose chatter, task details and attachments. Program
+         projects use only the restricted Project Program portal route. Global rules
+         intersect Odoo's permissive group rules; group rules would be ORed. -->
+    <record id="rule_standard_project_portal_boundary" model="ir.rule">
+        <field name="name">Program: standard project portal boundary</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="domain_force">[('program_id', '=', False)] if user._is_portal() else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_standard_task_portal_boundary" model="ir.rule">
+        <field name="name">Program: standard task portal boundary</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="domain_force">[('project_id.program_id', '=', False)] if user._is_portal() else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_standard_milestone_portal_boundary" model="ir.rule">
+        <field name="name">Program: standard milestone portal boundary</field>
+        <field name="model_id" ref="project.model_project_milestone"/>
+        <field name="domain_force">[('project_id.program_id', '=', False)] if user._is_portal() else [(1, '=', 1)]</field>
+    </record>
+</odoo>

@@ -1,0 +1,20 @@
+{
+    "name": "Project Program",
+    "summary": "Programs across standard Odoo projects",
+    "author": "Corvanis",
+    "version": "19.0.1.0.0",
+    "category": "Services/Project",
+    "license": "LGPL-3",
+    "depends": ["project", "calendar", "portal"],
+    "data": [
+        "security/project_program_security.xml",
+        "security/ir.model.access.csv",
+        "views/program_views.xml",
+        "views/goal_views.xml",
+        "views/review_views.xml",
+        "views/project_views.xml",
+        "views/portal_templates.xml",
+    ],
+    "application": True,
+    "installable": True,
+}

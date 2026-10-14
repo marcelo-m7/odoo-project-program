@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_program_user,program.user,model_project_program,project_program.group_program_user,1,1,1,0
+access_program_manager,program.manager,model_project_program,project_program.group_program_manager,1,1,1,1
+access_membership_user,membership.user,model_project_program_membership,project_program.group_program_user,1,1,1,0
+access_membership_manager,membership.manager,model_project_program_membership,project_program.group_program_manager,1,1,1,1
+access_measurement_user,measurement.user,model_project_program_measurement,project_program.group_program_user,1,1,1,0
+access_measurement_manager,measurement.manager,model_project_program_measurement,project_program.group_program_manager,1,1,1,1
+access_review_user,review.user,model_project_program_review,project_program.group_program_user,1,1,1,0
+access_review_manager,review.manager,model_project_program_review,project_program.group_program_manager,1,1,1,1
