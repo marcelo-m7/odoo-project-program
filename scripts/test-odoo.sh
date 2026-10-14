@@ -11,7 +11,7 @@ for i in $(seq 1 40); do
   sleep 1
 done
 run_odoo() {
- docker run --rm --network "$network" -v "$PWD:/mnt/extra-addons:ro" odoo:19.0 odoo \
+ docker run --rm --entrypoint odoo --network "$network" -v "$PWD:/mnt/extra-addons:ro" odoo:19.0 \
   --db_host="$db" --db_user=odoo --db_password=odoo -d program_test \
   --http-interface=0.0.0.0 --stop-after-init --test-enable --test-tags=/project_program \
   --without-demo=all --log-level=test "$@"
