@@ -1,0 +1,28 @@
+name: Odoo 19 app tests
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  odoo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python and XML syntax
+        run: |
+          python3 -m compileall -q project_program
+          python3 - <<'PY'
+          from pathlib import Path
+          from xml.etree import ElementTree
+          for file in Path('project_program').rglob('*.xml'):
+              ElementTree.parse(file)
+          PY
+      - name: Install, integration, HTTP and upgrade tests
+        run: bash scripts/test-odoo.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: odoo-test-logs
+          path: artifacts/
