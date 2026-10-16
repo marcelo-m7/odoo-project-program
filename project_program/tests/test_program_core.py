@@ -96,3 +96,22 @@ class TestProgramCore(TransactionCase):
         self.assertIn("program_objective", form.arch_db)
         self.assertIn("program_followup", form.arch_db)
         self.assertIn('invisible="not is_program"', form.arch_db)
+
+    def test_task_portal_readable_fields_included(self):
+        readable = self.task_a.TASK_PORTAL_READABLE_FIELDS
+        self.assertIn("is_program", readable)
+        self.assertIn("program_objective", readable)
+        self.assertIn("program_followup", readable)
+
+    def test_program_participant_names_computed_sudo(self):
+        self.assertEqual(self.program.program_mentor_name, "Program Mentor")
+        self.assertEqual(self.program.program_mentee_name, "Program Mentee")
+        portal = self.env["res.users"].with_context(no_reset_password=True).create({
+            "name": "Portal Reader",
+            "login": "portal.reader@example.invalid",
+            "group_ids": [(6, 0, [self.env.ref("base.group_portal").id])],
+        })
+        # Portal user without rights on external res.partner records can still read the computed name
+        program_as_portal = self.program.with_user(portal)
+        self.assertEqual(program_as_portal.program_mentor_name, "Program Mentor")
+        self.assertEqual(program_as_portal.program_mentee_name, "Program Mentee")

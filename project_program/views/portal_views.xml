@@ -9,12 +9,12 @@
           <div class="row">
             <div class="col-sm-6 mb-2">
               <strong>Mentor</strong>
-              <div t-if="project.program_mentor_id" t-esc="project.program_mentor_id.name"/>
+              <div t-if="project.program_mentor_name" t-esc="project.program_mentor_name"/>
               <div t-else="" class="text-muted">Não definido</div>
             </div>
             <div class="col-sm-6 mb-2">
               <strong>Mentorando</strong>
-              <div t-if="project.program_mentee_id" t-esc="project.program_mentee_id.name"/>
+              <div t-if="project.program_mentee_name" t-esc="project.program_mentee_name"/>
               <div t-else="" class="text-muted">Não definido</div>
             </div>
           </div>
