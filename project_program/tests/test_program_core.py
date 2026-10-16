@@ -53,7 +53,7 @@ class TestProgramCore(TransactionCase):
             "name": "Project Portal Tester",
             "login": "program.portal.test@example.invalid",
             "email": "program.portal.test@example.invalid",
-            "groups_id": [(6, 0, [portal_group.id])],
+            "group_ids": [(6, 0, [portal_group.id])],
         })
         with self.assertRaises(AccessError):
             self.program.with_user(portal).write({"program_mentor_id": self.mentee.id})
