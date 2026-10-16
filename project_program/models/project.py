@@ -26,6 +26,30 @@ class ProjectProject(models.Model):
         tracking=True,
         help="Contact participating as the mentee in this program.",
     )
+    program_mentor_name = fields.Char(
+        string="Nome do Mentor",
+        compute="_compute_program_participant_names",
+        compute_sudo=True,
+    )
+    program_mentee_name = fields.Char(
+        string="Nome do Mentorando",
+        compute="_compute_program_participant_names",
+        compute_sudo=True,
+    )
+
+    @api.depends("program_mentor_id.name", "program_mentee_id.name")
+    def _compute_program_participant_names(self):
+        for record in self:
+            record.program_mentor_name = (
+                record.program_mentor_id.sudo().name
+                if record.program_mentor_id
+                else False
+            )
+            record.program_mentee_name = (
+                record.program_mentee_id.sudo().name
+                if record.program_mentee_id
+                else False
+            )
 
     def write(self, vals):
         # Field-level readonly attributes in XML are not an RPC authorization boundary.
