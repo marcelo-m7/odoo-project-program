@@ -1,0 +1,25 @@
+<odoo>
+  <template id="portal_program_project_contacts"
+            inherit_id="project.portal_my_project"
+            name="Program contacts for shared project">
+    <xpath expr="//t[@t-call='project.portal_tasks_list']" position="before">
+      <section t-if="project.is_program" class="card mb-3" id="program_overview">
+        <div class="card-header"><strong>Programa</strong></div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6 mb-2">
+              <strong>Mentor</strong>
+              <div t-if="project.program_mentor_id" t-esc="project.program_mentor_id.name"/>
+              <div t-else="" class="text-muted">Não definido</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Mentorando</strong>
+              <div t-if="project.program_mentee_id" t-esc="project.program_mentee_id.name"/>
+              <div t-else="" class="text-muted">Não definido</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </xpath>
+  </template>
+</odoo>

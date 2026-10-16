@@ -1,0 +1,24 @@
+<odoo>
+  <record id="view_project_form_program" model="ir.ui.view">
+    <field name="name">project.project.form.program</field>
+    <field name="model">project.project</field>
+    <field name="inherit_id" ref="project.edit_project"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='partner_id']" position="after">
+        <field name="is_program" groups="base.group_user"/>
+        <field name="program_mentor_id" invisible="not is_program" groups="base.group_user"/>
+        <field name="program_mentee_id" invisible="not is_program" groups="base.group_user"/>
+      </xpath>
+    </field>
+  </record>
+  <record id="action_program_projects" model="ir.actions.act_window">
+    <field name="name">Programs</field>
+    <field name="res_model">project.project</field>
+    <field name="view_mode">kanban,list,form</field>
+    <field name="domain">[('is_program', '=', True)]</field>
+    <field name="context">{'default_is_program': True}</field>
+  </record>
+  <menuitem id="menu_program_projects" name="Programs"
+            parent="project.menu_main_pm" action="action_program_projects"
+            sequence="45" groups="project.group_project_user"/>
+</odoo>
