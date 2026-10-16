@@ -96,3 +96,18 @@ class TestProgramCore(TransactionCase):
         self.assertIn("program_objective", form.arch_db)
         self.assertIn("program_followup", form.arch_db)
         self.assertIn('invisible="not is_program"', form.arch_db)
+
+    def test_portal_readable_fields_include_program_without_write_access(self):
+        task = self.env["project.task"]
+        readable = task.TASK_PORTAL_READABLE_FIELDS
+        for name in ("is_program", "program_objective", "program_followup"):
+            self.assertIn(name, readable)
+        writable = task.TASK_PORTAL_WRITABLE_FIELDS
+        for name in ("program_objective", "program_followup"):
+            self.assertNotIn(name, writable)
+
+    def test_portal_participant_name_templates_use_limited_sudo(self):
+        view = self.env.ref("project_program.portal_program_project_contacts")
+        self.assertIn("project.program_mentor_id.sudo().name", view.arch_db)
+        self.assertIn("project.program_mentee_id.sudo().name", view.arch_db)
+        self.assertIn('t-if="project.is_program"', view.arch_db)
