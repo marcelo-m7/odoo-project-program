@@ -28,3 +28,10 @@ Branch: `feat/v6-is-program-core`, based on `main` to avoid silently modifying h
 5. Verify addon deployment prerequisites (target hosting and Odoo.sh plan/licensing) and client acceptance.
 
 The code is **not deployment-verified**. Source-only PR, no claim of complete E2E implementation.
+
+## 2026-10-16 follow-up security/test hardening
+
+- Added `project.project.create` guard: portal users cannot inject `is_program`, `program_mentor_id` or `program_mentee_id` on creation, including direct RPC.
+- Added tests for protected project create, propagation of flag changes to existing tasks without rewriting their notes, and inherited Project Sharing view referencing the same model fields.
+- Review of standard sharing modes and live browser acceptance **remains open**. Successful model tests do not prove all portal HTTP routes, token paths or attachment permissions.
+- V5 migration remains explicitly blocked until a database inventory and dry-run exist.
