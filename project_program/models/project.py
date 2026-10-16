@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import AccessError
 
 
 class ProjectProject(models.Model):
@@ -31,7 +32,12 @@ class ProjectProject(models.Model):
         if not self.env.user._is_internal() and set(vals) & {
             "is_program", "program_mentor_id", "program_mentee_id",
         }:
-            from odoo.exceptions import AccessError
-            from odoo import _
             raise AccessError(_("Only internal users can modify program configuration."))
         return super().write(vals)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        protected = {"is_program", "program_mentor_id", "program_mentee_id"}
+        if not self.env.user._is_internal() and any(protected & vals.keys() for vals in vals_list):
+            raise AccessError(_("Only internal users can configure program projects."))
+        return super().create(vals_list)
