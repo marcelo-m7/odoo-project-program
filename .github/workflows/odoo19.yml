@@ -1,0 +1,30 @@
+name: Odoo 19 - Project Program V6
+on:
+  push:
+    branches: ["feat/v6-is-program-core", "main"]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python/XML syntax
+        run: |
+          python3 -m compileall -q project_program
+          python3 - <<'PY'
+          from pathlib import Path
+          from xml.etree import ElementTree
+          for item in Path("project_program").rglob("*.xml"):
+              ElementTree.parse(item)
+              print("Validated:", item)
+          PY
+      - name: Odoo 19 install + upgrade tests
+        run: bash scripts/test-odoo.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: odoo19-v6-logs
+          path: artifacts/
