@@ -1,0 +1,39 @@
+<odoo>
+  <record id="view_task_form_program" model="ir.ui.view">
+    <field name="name">project.task.form.program</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.view_task_form2"/>
+    <field name="arch" type="xml">
+      <xpath expr="//notebook" position="inside">
+        <page name="program_page" string="Programa" invisible="not is_program">
+          <field name="is_program" invisible="1"/>
+          <group>
+            <field name="program_objective"/>
+            <field name="program_followup"/>
+          </group>
+        </page>
+      </xpath>
+      <xpath expr="//notebook" position="before">
+        <field name="is_program" invisible="1"/>
+      </xpath>
+    </field>
+  </record>
+  <record id="view_task_sharing_program" model="ir.ui.view">
+    <field name="name">project.task.project.sharing.program</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.project_sharing_project_task_view_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//notebook" position="before">
+        <field name="is_program" invisible="1"/>
+      </xpath>
+      <xpath expr="//notebook/page[@name='description_page']" position="after">
+        <page name="program_sharing_page" string="Programa" invisible="not is_program">
+          <group>
+            <field name="program_objective" readonly="1"/>
+            <field name="program_followup" readonly="1"/>
+          </group>
+        </page>
+      </xpath>
+    </field>
+  </record>
+</odoo>
