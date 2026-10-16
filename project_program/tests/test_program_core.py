@@ -64,3 +64,35 @@ class TestProgramCore(TransactionCase):
                 "name": "Forged", "project_id": self.program.id,
                 "program_objective": "Forged",
             })
+
+    def test_portal_cannot_inject_program_fields_on_project_create(self):
+        portal = self.env["res.users"].with_context(no_reset_password=True).create({
+            "name": "Program Project Creation Probe",
+            "login": "program.project.create@example.invalid",
+            "group_ids": [(6, 0, [self.env.ref("base.group_portal").id])],
+        })
+        with self.assertRaises(AccessError):
+            self.env["project.project"].with_user(portal).create({
+                "name": "Unauthorised program",
+                "is_program": True,
+            })
+
+    def test_program_task_flag_tracks_project_changes(self):
+        self.assertTrue(self.task_a.is_program)
+        self.program.write({"is_program": False})
+        self.assertFalse(self.task_a.is_program)
+        self.assertFalse(self.task_b.is_program)
+        self.assertEqual(self.task_a.program_objective, "First objective")
+        self.program.write({"is_program": True})
+        self.assertTrue(self.task_a.is_program)
+
+    def test_project_sharing_uses_same_persisted_fields(self):
+        form = self.env.ref("project_program.view_task_sharing_program")
+        self.assertEqual(form.model, "project.task")
+        self.assertEqual(
+            form.inherit_id,
+            self.env.ref("project.project_sharing_project_task_view_form"),
+        )
+        self.assertIn("program_objective", form.arch_db)
+        self.assertIn("program_followup", form.arch_db)
+        self.assertIn('invisible="not is_program"', form.arch_db)
