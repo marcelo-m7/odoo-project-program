@@ -20,6 +20,12 @@ class ProjectTask(models.Model):
         copy=False,
     )
 
+    @property
+    def TASK_PORTAL_READABLE_FIELDS(self):
+        """Extend only task reads, never the portal writable allowlist."""
+        return [*super().TASK_PORTAL_READABLE_FIELDS,
+                "is_program", "program_objective", "program_followup"]
+
     def write(self, vals):
         if not self.env.user._is_internal() and {
             "program_objective", "program_followup",
